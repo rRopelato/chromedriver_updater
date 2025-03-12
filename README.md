@@ -13,7 +13,7 @@ ChromeDriver Updater é uma ferramenta escrita em Go que verifica, baixa e atual
 
 * Windows
 * Conexão com a internet
-* SeleniumBasic instalado em `<span>C:\Users\<seu_usuario>\AppData\Local\SeleniumBasic</span>`
+* SeleniumBasic instalado em `C:\Users\<seu_usuario>\AppData\Local\SeleniumBasic`
 
 ## Instalação
 
@@ -37,8 +37,8 @@ ChromeDriver Updater é uma ferramenta escrita em Go que verifica, baixa e atual
    chromedriver-updater.exe
    ```
 2. Escolha uma opção no menu:
-   * `<span>1</span>`: Atualizar o ChromeDriver.
-   * `<span>2</span>`: Sair.
+   * `1`: Atualizar o ChromeDriver.
+   * `2`: Sair.
 
 O programa buscará a versão mais recente do ChromeDriver, fará o download e substituirá automaticamente o arquivo antigo.
 
