@@ -83,7 +83,7 @@ func getDownloadURL(_ string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("URL para Windows 64 bits não encontrada")
+	return "", fmt.Errorf("url not found")
 }
 
 func downloadFile(url, filePath string) error {
@@ -152,7 +152,7 @@ func getInstalledVersion(seleniumPath string) (string, error) {
 	if len(parts) >= 2 {
 		return parts[1], nil
 	}
-	return "", fmt.Errorf("não foi possível obter a versão instalada")
+	return "", fmt.Errorf("couldn't find the installed version.")
 }
 
 func clearTerminal() {
@@ -163,15 +163,15 @@ func clearTerminal() {
 
 func showMenu(latestVersion, installedVersion string) int {
 	clearTerminal()
-	fmt.Println("Atualizador ChromeDriver")
+	fmt.Println("ChromeDriver Updater")
 	fmt.Println()
 	fmt.Println("https://github.com/rRopelato")
 	fmt.Println()
-	fmt.Println("Versão disponível do ChromeDriver:", latestVersion)
-	fmt.Println("Versão instalada do ChromeDriver:", installedVersion)
+	fmt.Println("Available ChromeDriver on API:", latestVersion)
+	fmt.Println("Installed ChromeDriver version:", installedVersion)
 	fmt.Println()
-	fmt.Println("1. Atualizar ChromeDriver")
-	fmt.Println("2. Sair")
+	fmt.Println("1. Update ChromeDriver")
+	fmt.Println("2. Exit")
 	fmt.Println()
 	var choice int
 	fmt.Scanln(&choice)
@@ -188,19 +188,19 @@ func main() {
 
 	seleniumPath, err := getSeleniumPath()
 	if err != nil {
-		fmt.Println("Erro ao obter o caminho do SeleniumBasic:", err)
+		fmt.Println("couldn't find seleniumbasic path:", err)
 		return
 	}
 
 	installedVersion, err := getInstalledVersion(seleniumPath)
 	if err != nil {
-		fmt.Println("Erro ao verificar a versão instalada:", err)
-		installedVersion = "Não instalada"
+		fmt.Println("error on getting version number:", err)
+		installedVersion = "Not installed"
 	}
 
 	latestVersion, err := getLatestVersion()
 	if err != nil {
-		fmt.Println("Erro ao buscar a versão mais recente:", err)
+		fmt.Println("couldn't find latest version:", err)
 		return
 	}
 
@@ -209,30 +209,30 @@ func main() {
 		switch choice {
 		case 1:
 			clearTerminal()
-			fmt.Println("Baixando ChromeDriver versão", latestVersion)
+			fmt.Println("Downloading ChromeDriver version", latestVersion)
 			url, err := getDownloadURL(latestVersion)
 			if err != nil {
-				fmt.Println("Erro ao obter URL de download:", err)
+				fmt.Println("error on finding url:", err)
 				continue
 			}
 
 			tempZip := "chromedriver.zip"
-			fmt.Println("Baixando de:", url)
+			fmt.Println("Downloading from:", url)
 			if err := downloadFile(url, tempZip); err != nil {
-				fmt.Println("Erro ao baixar o arquivo:", err)
+				fmt.Println("Error:", err)
 				continue
 			}
 
 			tempFolder := "chromedriver_temp"
 			os.MkdirAll(tempFolder, os.ModePerm)
 
-			fmt.Println("Extraindo ChromeDriver...")
+			fmt.Println("Extracting ChromeDriver...")
 			if err := unzip(tempZip, tempFolder); err != nil {
-				fmt.Println("Erro ao extrair o arquivo:", err)
+				fmt.Println("Error:", err)
 				continue
 			}
 
-			fmt.Println("Atualizando ChromeDriver na pasta SeleniumBasic...")
+			fmt.Println("Updating ChromeDriver...")
 			err = filepath.Walk(tempFolder, func(path string, info os.FileInfo, err error) error {
 				if err != nil {
 					return err
@@ -246,9 +246,9 @@ func main() {
 			})
 
 			if err != nil {
-				fmt.Println("Erro ao atualizar ChromeDriver:", err)
+				fmt.Println("Error:", err)
 			} else {
-				fmt.Println("ChromeDriver atualizado com sucesso!")
+				fmt.Println("ChromeDriver updated sucessfully!")
 			}
 
 			os.Remove(tempZip)
@@ -256,14 +256,14 @@ func main() {
 
 			installedVersion, err = getInstalledVersion(seleniumPath)
 			if err != nil {
-				fmt.Println("Erro ao verificar a versão instalada:", err)
-				installedVersion = "Não instalada"
+				fmt.Println("Error on getting installed version:", err)
+				installedVersion = "Not installed"
 			}
 		case 2:
-			fmt.Println("Saindo...")
+			fmt.Println("Exiting...")
 			return
 		default:
-			fmt.Println("Opção inválida, tente novamente.")
+			fmt.Println("Invalid option, try again.")
 		}
 	}
 }
